@@ -1,19 +1,17 @@
-import {useEffect, useState} from 'react';
-import Selector from './components/Selector';
-import RecipeView from './components/RecipeView';
-import './App.css';
-
+import { useEffect, useState } from "react";
+import Selector from "./components/Selector";
+import RecipeView from "./components/RecipeView";
+import "./App.css";
 
 function App() {
-  const [recipes, setRecipes] = useState([]);
-  const [recipe, setRecipe] = useState(null);
+  const [allRecipes, setAllRecipes] = useState([]);
+  const [chosenRecipe, setChosenRecipe] = useState(null);
 
-  const fetchData = async() => {
-    const response = await fetch("http://localhost:3002/recipe");
-    console.log(" running app ");
+  const fetchData = async () => {
+    const response = await fetch("http://localhost:3002/all-recipes");
     const resData = await response.json();
-    setRecipes(resData);
-  }
+    setAllRecipes(resData);
+  };
 
   useEffect(() => {
     fetchData();
@@ -21,9 +19,12 @@ function App() {
 
   return (
     <div className="App">
-      <Selector recipes={recipes} setRecipe={setRecipe}/>
-      {recipe ? (<RecipeView recipe={recipe}/>) :
-       (<div className="content-area info-msg">No recipe chosen.</div>)}
+      <Selector allRecipes={allRecipes} setChosenRecipe={setChosenRecipe} />
+      {chosenRecipe ? (
+        <RecipeView chosenRecipe={chosenRecipe} />
+      ) : (
+        <div>No recipe chosen.</div>
+      )}
     </div>
   );
 }
